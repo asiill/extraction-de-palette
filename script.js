@@ -12,7 +12,7 @@ const displayPalette = (colours) => {
 
 const extractPalette = (data) => {
     // Nombre de couleurs à retourner
-    const colourCount = 5;
+    const colourCount = document.getElementById("colour-count").value;
 
     // Un ensemble pour stocker les couleurs uniques
     const colourSet = new Set();
@@ -40,6 +40,7 @@ const uploadArea = document.querySelector('.border-dashed');
 uploadArea.addEventListener('click', () => {
     imageInput.click();
 });
+
 const image = document.getElementById("imageInput");
 imageInput.addEventListener("change", (e) => {
 
