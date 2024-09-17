@@ -11,14 +11,14 @@ const displayPalette = (colours) => {
 };
 
 const extractPalette = (data) => {
-    // Nombre de couleurs les plus fréquentes à retourner
+    // Nombre de couleurs à retourner
     const colourCount = 5;
 
-    // Un objet stockant les occurrences de chaque couleur dans les données de pixels
-    const colourMap = {};
+    // Un ensemble pour stocker les couleurs uniques
+    const colourSet = new Set();
 
-    // Un tableau contenant les couleurs extraites, triées par ordre de fréquence
-    const colours = [];
+    // Un tableau contenant les couleurs extraites
+    let colours;
 
     for (let i = 0; i < data.length; i +=4) {
         const r = data[i];
@@ -26,21 +26,12 @@ const extractPalette = (data) => {
         const b = data[i + 2];
         const rgb = `${r},${g},${b}`;
 
-        if (colourMap[rgb]) {
-            colourMap[rgb]++;
-        } else {
-            colourMap[rgb] = 1;
-        }
+        colourSet.add(rgb);
     }
 
-    // Object.entries(colourMap) renvoie un tableau de paires clé-valeur avec la valeur rgb et son compte
-    // Le tableau est trié par ordre décroissant de fréquence
-    const sorted = Object.entries(colourMap).sort((a, b) => b[1] - a[1]);
-
-    // Obtenir les 5 couleurs les plus fréquentes
-    for (let i = 0; i < colourCount && i < sorted.length; i++) {
-        colours.push(sorted[i][0]);
-    }
+    // Convertir le Set en tableau et limiter le nombre de couleurs
+    const uniqueColours = Array.from(colourSet);
+    colours = uniqueColours.slice(0, colourCount);
 
     return colours;
 };
