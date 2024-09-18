@@ -1,3 +1,7 @@
+let isImageLoaded = false;
+let imageData;
+let numberInput = document.getElementById("colour-count");
+
 const displayPalette = (colours) => {
     const palette = document.getElementById("palette");
     palette.textContent = "";
@@ -12,7 +16,7 @@ const displayPalette = (colours) => {
 
 const extractPalette = (data) => {
     // Nombre de couleurs à retourner
-    const colourCount = document.getElementById("colour-count").value;
+    const colourCount = numberInput.value;
 
     // Un ensemble pour stocker les couleurs uniques
     const colourSet = new Set();
@@ -35,6 +39,17 @@ const extractPalette = (data) => {
 
     return colours;
 };
+
+// Régénérer une palette pour la même image si le nombre de couleurs est modifié
+numberInput.addEventListener("input", () => {
+    if (!isImageLoaded) {
+        return;
+    } else {
+        const colourCount = numberInput.value;
+        const colours = extractPalette(imageData.data, colourCount);
+        displayPalette(colours);
+    }
+});
 
 const uploadArea = document.querySelector('.border-dashed');
 uploadArea.addEventListener('click', () => {
@@ -90,9 +105,11 @@ imageInput.addEventListener("change", (e) => {
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.drawImage(img, x, y, drawWidth, drawHeight);
 
+        isImageLoaded = true;
+
         // Obtenir les données de pixels du canvas
         // Cela renvoie un objet ImageData contenant les valeurs RGBA de chaque pixel
-        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
         // imageData.data contient les données de pixels de l'objet ImageData
         // Les données de pixels sont stockées sous forme de tableau 1d dans la forme [R, G, B, A, R, G, B, A, ...]
