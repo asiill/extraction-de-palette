@@ -25,14 +25,16 @@ button:hover {
 .colour-box {
     width: 6rem;
     height: 6rem;
-    border-radius: 0.5rem;
     display: flex;
     align-items: flex-end;
     justify-content: center;
+    cursor: pointer;
 }
 
 .colour-code {
-    color: #686666;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.8);
+    background-color: blac;
     padding: 0.2rem;
     width: 100%;
 }

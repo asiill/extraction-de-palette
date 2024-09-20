@@ -1,6 +1,13 @@
 let isImageLoaded = false;
 let imageData;
-let numberInput = document.getElementById("colour-count");
+let colourCount = 5;
+
+const image = document.getElementById("imageInput");
+
+let uploadArea = document.querySelector(".upload-area");
+uploadArea.addEventListener("click", () => {
+    imageInput.click();
+});
 
 const createNotification = (message) => {
     const notification = document.createElement("div");
@@ -41,10 +48,11 @@ const displayPalette = (colours) => {
         colourBox.classList.add("colour-box");
         colourBox.style.backgroundColor = `rgb(${colour})`;
 
-        const colourCode = document.createElement("button");
+        const colourCode = document.createElement("div");
         colourCode.classList.add("colour-code");
         colourCode.textContent = hexCode;
-        colourCode.addEventListener("click", () => {
+
+        colourBox.addEventListener("click", () => {
             const text = colourCode.textContent;
             navigator.clipboard.writeText(text)
                 .then(() => {
@@ -69,14 +77,11 @@ const colourDistance = (rgb1, rgb2) => {
 };
 
 const extractPalette = (data) => {
-    // Nombre de couleurs à retourner
-    const colourCount = numberInput.value;
-
     // Un tableau pour stocker les couleurs uniques
     let colourSet = [];
 
     // Un tableau contenant les couleurs finales
-    let colours;
+    let colours = [];
 
     const minDistance = 100;
 
@@ -100,21 +105,10 @@ const extractPalette = (data) => {
         }
     }
 
-    colours = colours = colourSet.slice(0, colourCount);
+    colours = colourSet.slice(0, colourCount);
 
     return colours;
 };
-
-// Régénérer une palette pour la même image si le nombre de couleurs est modifié
-numberInput.addEventListener("input", () => {
-    if (!isImageLoaded) {
-        return;
-    } else {
-        const colourCount = numberInput.value;
-        const colours = extractPalette(imageData.data, colourCount);
-        displayPalette(colours);
-    }
-});
 
 const drawImageToCanvas = (img) => {
     const canvas = document.getElementById("canvas");
@@ -158,6 +152,10 @@ const drawImageToCanvas = (img) => {
     context.drawImage(img, x, y, drawWidth, drawHeight);
 
     isImageLoaded = true;
+    document.querySelector(".upload-area").style.display = "none";
+    canvas.addEventListener("click", () => {
+        imageInput.click();
+    });
 
     // Obtenir les données de pixels du canvas
     // Cela renvoie un objet ImageData contenant les valeurs RGBA de chaque pixel
@@ -172,12 +170,6 @@ const drawImageToCanvas = (img) => {
     displayPalette(colours);
 };
 
-const uploadArea = document.querySelector(".border-dashed");
-uploadArea.addEventListener("click", () => {
-    imageInput.click();
-});
-
-const image = document.getElementById("imageInput");
 imageInput.addEventListener("change", (e) => {
 
     // e.target.files est un objet FileList des fichiers sélectionnés par l'utilisateur
